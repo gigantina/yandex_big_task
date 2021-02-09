@@ -3,14 +3,11 @@ import sys
 import pygame
 import requests
 
-coord = '38.205085,44.419486'
+x = 38.205085
+y = 44.419486
 z = 17
 
 params_for_map = {}
-map_files = []
-
-pygame.init()
-screen = pygame.display.set_mode((600, 400))
 
 
 def draw_text(screen, text, x, y):
@@ -20,18 +17,24 @@ def draw_text(screen, text, x, y):
     screen.blit(text, (text_x, text_y))
 
 
+map_files = []
+
+pygame.init()
+screen = pygame.display.set_mode((600, 400))
 type_ = 'map'
 run = True
 sat = pygame.Rect((0, 0), (20, 20))
 map = pygame.Rect((40, 0), (20, 20))
 gbr = pygame.Rect((80, 0), (20, 20))
+
+run = True
 while run:
     map_request = f"http://static-maps.yandex.ru/1.x"
-    params_for_map['l'] = type_
     params_for_map['z'] = z
-    params_for_map['ll'] = coord
+    params_for_map['ll'] = f'{x},{y}'
+    params_for_map['l'] = type_
     response = requests.get(map_request, params_for_map)
-
+    rects = [(sat, 'S', 'sat'), (map, 'M', 'map'), (gbr, 'G', 'sat,skl')]
     if not response:
         print("Ошибка выполнения запроса:")
         print(response.url)
@@ -42,15 +45,13 @@ while run:
     with open(map_file, "wb") as file:
         file.write(response.content)
 
-    rects = [(sat, 'S', 'sat'), (map, 'M', 'map'), (gbr, 'G', 'sat,skl')]
-
     screen.blit(pygame.image.load(map_file), (0, 0))
+
     for i in range(3):
         rect = rects[i][0]
         text = rects[i][1]
         pygame.draw.rect(screen, (0, 0, 0), rect)
         draw_text(screen, text, rect.x + 2, rect.y + 1)
-
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -59,6 +60,14 @@ while run:
             if event.key == pygame.K_PAGEUP:
                 if z != 22:
                     z += 1
+            if event.key == pygame.K_UP:
+                y += 1
+            elif event.key == pygame.K_DOWN:
+                y -= 1
+            elif event.key == pygame.K_RIGHT:
+                x += 1
+            elif event.key == pygame.K_LEFT:
+                x -= 1
             elif event.key == pygame.K_PAGEDOWN:
                 if z != 1:
                     z -= 1
