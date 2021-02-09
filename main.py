@@ -62,13 +62,13 @@ while run:
                 if z != 22:
                     z += 1
             if event.key == pygame.K_UP:
-                y += 1
+                y += 0.5
             elif event.key == pygame.K_DOWN:
-                y -= 1
+                y -= 0.5
             elif event.key == pygame.K_RIGHT:
-                x += 1
+                x += 0.5
             elif event.key == pygame.K_LEFT:
-                x -= 1
+                x -= 0.5
             elif event.key == pygame.K_PAGEDOWN:
                 if z != 1:
                     z -= 1
