@@ -9,6 +9,7 @@ z = 10
 params_for_map = {
     'l': 'map',
 }
+
 map_files = []
 
 pygame.init()
