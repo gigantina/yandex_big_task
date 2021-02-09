@@ -15,6 +15,7 @@ pygame.init()
 screen = pygame.display.set_mode((600, 400))
 
 run = True
+
 while run:
     map_request = f"http://static-maps.yandex.ru/1.x"
     params_for_map['z'] = z
