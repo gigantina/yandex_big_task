@@ -28,6 +28,7 @@ map = pygame.Rect((40, 0), (20, 20))
 gbr = pygame.Rect((80, 0), (20, 20))
 
 run = True
+
 while run:
     map_request = f"http://static-maps.yandex.ru/1.x"
     params_for_map['z'] = z
