@@ -11,9 +11,6 @@ z = 17
 params_for_map = {}
 
 
-
-
-
 def draw_text(screen, text, x, y):
     font = pygame.font.Font(None, 20)
     text = font.render(text, True, (255, 255, 255))
@@ -34,9 +31,9 @@ gbr = pygame.Rect((80, 2), (20, 20))
 
 def make_req(place):
     global x, y
-    place = "_".join(place.split())
     try:
-        res = requests.get(f"http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={place}&format=json")
+        res = requests.get(
+            f"http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={place}&format=json")
         res = res.json()
         res = res["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
         c = res["Point"]["pos"]
@@ -48,21 +45,23 @@ def make_req(place):
     except Exception:
         print("Ошибка")
 
+
 manager = pygame_gui.UIManager((600, 400))
 clock = pygame.time.Clock()
 
 entry = pygame_gui.elements.UITextEntryLine(
-    relative_rect=pygame.Rect((105, 0), (100, 25)), manager=manager
+    relative_rect=pygame.Rect((105, 0), (120, 25)), manager=manager
 )
 
 run = True
 
 while run:
-    time_delta = clock.tick(60)/1000.0
+    time_delta = clock.tick(60) / 1000.0
     map_request = f"http://static-maps.yandex.ru/1.x"
     params_for_map['z'] = z
     params_for_map['ll'] = f'{x},{y}'
     params_for_map['l'] = type_
+    params_for_map['pt'] = f"{x},{y},pm2rdm"
     response = requests.get(map_request, params_for_map)
     rects = [(sat, 'S', 'sat'), (map, 'M', 'map'), (gbr, 'G', 'sat,skl')]
     if not response:
@@ -87,7 +86,6 @@ while run:
     pygame.display.flip()
     for event in pygame.event.get():
         manager.process_events(event)
-
 
         if event.type == pygame.QUIT:
             run = False
